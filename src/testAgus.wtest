@@ -1,0 +1,89 @@
+import profesionalesAgus.*
+
+describe "Universidades" {
+	
+	test "empresa" {
+		const unsam = new Universidad()
+		unsam.provinciaLocal("Buenos Aires")
+		unsam.honorariosRecomendados(3500)
+		
+		const unahur = new Universidad()
+		unahur.provinciaLocal("Corrientes")
+		unahur.honorariosRecomendados(4200)
+		
+		const udc = new Universidad()
+		udc.provinciaLocal("Corrientes")
+		udc.honorariosRecomendados(4200)
+		
+		const udr = new Universidad()
+		udr.provinciaLocal("Santa Fe")
+		udr.honorariosRecomendados(2800)
+		
+		const juana = new ProfesionalVinculado()
+		juana.universidad(udr)
+		const melina = new ProfesionalAsociado()
+		melina.universidad(udc)		
+		const rocio = new ProfesionalLibre()
+		rocio.universidad(unahur)
+		rocio.honorariosPorHora(5000)
+		rocio.provinciasDondePuedeTrabajar(["Santa Fe", "Córdoba", "Buenos Aires"])
+		const luciana = new ProfesionalLibre()
+		luciana.universidad(udr)
+		luciana.honorariosPorHora(3200)
+		luciana.provinciasDondePuedeTrabajar(["Santa Fe", "Entre Ríos"])
+		
+		const empresa = new EmpresaDeServicios()
+		empresa.contratar([juana, melina, rocio, luciana])
+		empresa.honorarioDePreferencia(3200)
+		
+		
+		// cuantos estudiaron en...
+		assert.equals(2, empresa.cuantosEstudiaronEn(udr))
+		assert.equals(1, empresa.cuantosEstudiaronEn(unahur))
+		assert.equals(0, empresa.cuantosEstudiaronEn(unsam))
+		
+		// profesionales caros...
+		assert.equals(1, empresa.profesionalesCaros().size())
+		
+		// universidades formadoras...
+		assert.equals(3, empresa.universidadesFormadoras().size())
+		
+		// profesional barato...
+		assert.equals(juana, empresa.profesionalBarato())
+		
+		// es de gente acotada...
+		assert.that(not empresa.esDeGenteAcotada())
+	}
+}
+
+describe "solicitantes" {
+		
+	test "puede satisfacer a..." {
+		const udr = new Universidad()
+		udr.provinciaLocal("Santa Fe")
+		udr.honorariosRecomendados(2800)
+		const unahur = new Universidad()
+		unahur.provinciaLocal("Corrientes")
+		unahur.honorariosRecomendados(4200)
+		
+		const juana = new ProfesionalVinculado()
+		juana.universidad(udr)
+		const rocio = new ProfesionalLibre()
+		rocio.universidad(unahur)
+		rocio.honorariosPorHora(5000)
+		rocio.provinciasDondePuedeTrabajar(["Santa Fe", "Córdoba", "Buenos Aires"])
+		
+		const empresa = new EmpresaDeServicios()
+		empresa.contratar([juana, rocio])
+		empresa.honorarioDePreferencia(3200)
+		
+		const per1 = new Persona(provincia = "Córdoba")
+		const sanLorenzo = new Club(provinciasDondeEsta = #{"Córdoba", "Buenos Aires"})
+		const inst = new Institucion(universidadesReconocidas = #{unahur})
+		
+		assert.that(empresa.puedeSatisfacerA(per1))
+		assert.that(empresa.puedeSatisfacerA(sanLorenzo))
+		assert.that(empresa.puedeSatisfacerA(inst))
+		}
+	
+}

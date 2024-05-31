@@ -1,0 +1,32 @@
+import profesionales.*
+
+describe "pruebas de profesionales" { // junta todos los test en uno, solo incializo una vez
+	test "Un profesional vinculado cobra lo que dice su universidad" {
+		const uni = new Universidad(provincia = "bsas", honorariosPorHora = 5000)
+		const pro1  = new ProfesionalVinculado(universidad = uni)
+	
+		assert.equals(5000, pro1.honorariosPorHora())
+	}
+
+
+	test "La empresa que tiene un profesional asociado puede atender a una persona
+		  de corrientes o de bsas" {
+		const uni = new Universidad(provincia = "bsas", honorariosPorHora = 5000)
+		const profA = new ProfesionalVinculado(universidad = uni)
+		const unaPersona = new Persona(provincia = "Corrientes")
+		const unaEmpresa = new Empresa()
+		unaEmpresa.contratar(profA)
+	
+		assert.that(unaEmpresa.puedeSatisdaser(unaPersona))
+	}
+
+	test "jfie" {
+		const uni = new Universidad(provincia = "bsas", honorariosPorHora = 5000)
+		const profA = new ProfesionalVinculado(universidad = uni)
+		const unaInstitucion = new Institucion()
+		const unaEmpresa = new Empresa()
+		unaEmpresa.contratar(profA)
+		unaInstitucion.agregarReconocida(uni)
+		assert.that(unaEmpresa.puedeSatisdaser(unaInstitucion))
+}
+}
